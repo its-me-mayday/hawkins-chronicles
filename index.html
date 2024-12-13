@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stranger Things App</title>
+    <style>
+        /* Body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #111;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        h1, h2 {
+            font-family: 'Creepster', cursive;
+            text-align: center;
+            color: #f3f3f3;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0px 0px 15px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Header */
+        h1 {
+            font-size: 36px;
+        }
+
+        /* Input styles */
+        input[type="text"] {
+            padding: 15px;
+            margin: 10px 0;
+            width: calc(100% - 30px);
+            background-color: #222;
+            border: 2px solid #e74c3c;
+            border-radius: 5px;
+            color: #f0f0f0;
+            font-size: 18px;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus {
+            border-color: #f39c12;
+            background-color: #333;
+            color: #f39c12;
+        }
+
+        /* Button styles */
+        button {
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            border: none;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Sections */
+        #missions-section, #undici-section {
+            display: none;
+        }
+
+        .missions-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .missions-list li {
+            margin: 10px 0;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .missions-list li:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .missions-list li button {
+            background-color: #f39c12;
+            border: none;
+            color: black;
+            font-size: 16px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .missions-list li button:hover {
+            background-color: #f1c40f;
+        }
+
+        /* Animation for buttons */
+        @keyframes neonAnimation {
+            0% {
+                text-shadow: 0 0 5px #e74c3c, 0 0 10px #e74c3c, 0 0 15px #e74c3c, 0 0 20px #e74c3c, 0 0 25px #e74c3c, 0 0 30px #e74c3c;
+            }
+            50% {
+                text-shadow: 0 0 10px #f39c12, 0 0 20px #f39c12, 0 0 30px #f39c12, 0 0 40px #f39c12, 0 0 50px #f39c12, 0 0 60px #f39c12;
+            }
+            100% {
+                text-shadow: 0 0 5px #e74c3c, 0 0 10px #e74c3c, 0 0 15px #e74c3c, 0 0 20px #e74c3c, 0 0 25px #e74c3c, 0 0 30px #e74c3c;
+            }
+        }
+
+        /* Apply animation to title */
+        h1 {
+            animation: neonAnimation 1.5s infinite alternate;
+        }
+
+        /* Custom font for Stranger Things - add this link to use Creepster */
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stranger Things App</h1>
+
+        <!-- Sezione di registrazione utente -->
+        <div id="register-section">
+            <h2>Register</h2>
+            <input type="text" id="username" placeholder="Enter your username">
+            <button onclick="registerUser()">Register</button>
+            <p id="user-message"></p>
+        </div>
+
+        <!-- Sezione per missioni -->
+        <div id="missions-section">
+            <h2>Your Missions</h2>
+            <ul id="missions-list" class="missions-list"></ul>
+        </div>
+
+        <!-- Sezione per interagire con Undici -->
+        <div id="undici-section">
+            <h2>Talk to Eleven</h2>
+            <input type="text" id="undici-input" placeholder="Say something to Eleven">
+            <button onclick="talkToUndici()">Talk</button>
+            <p id="undici-response"></p>
+        </div>
+    </div>
+
+    <script>
+        let username = "";
+
+        function registerUser() {
+            username = document.getElementById("username").value;
+            
+            if (username) {
+                fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("user-message").innerText = data.message;
+                    document.getElementById("register-section").style.display = 'none';
+                    document.getElementById("missions-section").style.display = 'block';
+                    document.getElementById("undici-section").style.display = 'block';
+                    loadMissions();
+                });
+            } else {
+                alert("Please enter a username!");
+            }
+        }
+
+        function loadMissions() {
+            fetch('/missions')
+                .then(response => response.json())
+                .then(data => {
+                    const missionsList = document.getElementById("missions-list");
+                    missionsList.innerHTML = '';
+                    data.forEach((mission, index) => {
+                        const missionItem = document.createElement("li");
+                        missionItem.innerText = mission.title;
+                        if (!mission.completed) {
+                            const completeButton = document.createElement("button");
+                            completeButton.innerText = "Complete Mission";
+                            completeButton.onclick = () => completeMission(index);
+                            missionItem.appendChild(completeButton);
+                        } else {
+                            missionItem.innerText += " (Completed)";
+                        }
+                        missionsList.appendChild(missionItem);
+                    });
+                });
+        }
+
+        function completeMission(missionIndex) {
+            fetch('/missions/complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, missionIndex })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                loadMissions(); // Ricarica la lista delle missioni
+            });
+        }
+
+        function talkToUndici() {
+            const input = document.getElementById("undici-input").value;
+            fetch('/talk_to_undici', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("undici-response").innerText = data.response;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+    "name": "hawkins-chronicles",
+    "version": "1.0.0",
+    "description": "A Stranger Things-themed app using JavaScript",
+    "main": "app.js",
+    "dependencies": {
+        "express": "^4.21.2"
+    },
+    "scripts": {
+        "start": "node app.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/its-me-mayday/hawkins-chronicles.git"
+    },
+    "keywords": [],
+    "bugs": {
+        "url": "https://github.com/its-me-mayday/hawkins-chronicles/issues"
+    },
+    "homepage": "https://github.com/its-me-mayday/hawkins-chronicles#readme"
+}
